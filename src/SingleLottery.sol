@@ -17,11 +17,7 @@ contract SingleLottery {
 
     // События
     event TicketPurchased(address buyer, uint256 amount);
-    event LotteryDrawn(
-        address winner,
-        uint256 winnerPrize,
-        uint256 returnedPrize
-    );
+    event LotteryDrawn(address winner, uint256 winnerPrize, uint256 returnedPrize);
 
     // Модификаторы
     modifier onlyOwner() {
@@ -49,14 +45,8 @@ contract SingleLottery {
     // Функция покупки билетов - добавлен учет уникальных участников
     function buyTickets(uint256 _amount) public payable lotteryOpen {
         require(_amount > 0, "You must buy at least one ticket");
-        require(
-            ticketsSold + _amount <= MAX_TICKETS,
-            "Not enough tickets available"
-        );
-        require(
-            msg.value == _amount * TICKET_PRICE,
-            "Incorrect ETH amount sent"
-        );
+        require(ticketsSold + _amount <= MAX_TICKETS, "Not enough tickets available");
+        require(msg.value == _amount * TICKET_PRICE, "Incorrect ETH amount sent");
 
         // Записываем информацию о покупателе
         participantTickets[msg.sender] += _amount;
@@ -101,7 +91,7 @@ contract SingleLottery {
                 uint256 participantShare = returnedPrize * participantTickets[participant] / ticketsSold;
                 participantTickets[participant] = 0; // Обнуляем перед отправкой
 
-                (bool sent,) = payable(participant).call{value: participantShare}("");
+                (bool sent, ) = payable(participant).call{value: participantShare}("");
                 require(sent, "Failed to send ETH to participant");
             }
         }
@@ -128,13 +118,10 @@ contract SingleLottery {
         for (uint256 i = 0; i < ticketOwners.length; i++) {
             address participant = ticketOwners[i];
             if (participantTickets[participant] > 0) {
-                uint256 refundAmount = participantTickets[participant] *
-                            TICKET_PRICE;
+                uint256 refundAmount = participantTickets[participant] * TICKET_PRICE;
                 participantTickets[participant] = 0; // Обнуляем перед отправкой
 
-                (bool sent,) = payable(participant).call{value: refundAmount}(
-                    ""
-                );
+                (bool sent,) = payable(participant).call{value: refundAmount}("");
                 require(sent, "Failed to send ETH to participant");
             }
         }
