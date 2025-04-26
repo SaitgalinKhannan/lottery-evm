@@ -71,7 +71,7 @@ contract SingleLottery {
         require(address(this).balance == ticketsSold * TICKET_PRICE, "Prize pool incorrect");
 
         // Генерируем случайное число для выбора победителя
-        uint256 randomIndex = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, ticketOwners))) % ticketsSold;
+        uint256 randomIndex = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, ticketOwners))) % ticketsSold;
         address winner = ticketOwners[randomIndex];
 
         // Расчет призов
