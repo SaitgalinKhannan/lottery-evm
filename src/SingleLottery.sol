@@ -91,7 +91,7 @@ contract SingleLottery {
                 uint256 participantShare = returnedPrize * participantTickets[participant] / ticketsSold;
                 participantTickets[participant] = 0; // Обнуляем перед отправкой
 
-                (bool sent, ) = payable(participant).call{value: participantShare}("");
+                (bool sent,) = payable(participant).call{value: participantShare}("");
                 require(sent, "Failed to send ETH to participant");
             }
         }
