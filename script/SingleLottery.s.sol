@@ -13,8 +13,8 @@ contract LotteryDeployScript is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         // Деплоим контракт с заданными параметрами
-        // 0.01 ETH цена билета и 100 билетов всего
-        SingleLottery lottery = new SingleLottery(0.01 ether, 100);
+        // 0.01 BNB цена билета и 100 билетов всего
+        SingleLottery lottery = new SingleLottery(0.01 ether, 100, 20, 30, 50);
 
         // Выводим адрес контракта для справки
         console.log("Lottery deployed at:", address(lottery));
