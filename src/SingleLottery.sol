@@ -39,12 +39,15 @@ contract SingleLottery {
     modifier lotteryOpen() {
         require(!lotteryFinished, "Lottery is already finished");
         require(ticketsSold < MAX_TICKETS, "All tickets have been sold");
+        //require(block.timestamp >= START_TIME, "Lottery has not started yet");
+        //require(block.timestamp < START_TIME + DURATION, "Lottery has ended");
         _;
     }
 
     modifier lotteryReady() {
         require(participants.length >= 2, "At least two participants required");
         require(ticketsSold > 0, "No tickets sold yet");
+        //require(block.timestamp >= START_TIME + DURATION, "Lottery is still ongoing");
         _;
     }
 
@@ -54,6 +57,8 @@ contract SingleLottery {
         uint256 _ownerFeePercent,
         uint256 _winnerPrizePercent,
         uint256 _returnedPrizePercent
+        //uint256 _startTime,
+        //uint256 _duration
     ) {
         require(_ticketPrice > 0, "Ticket price must be greater than zero");
         require(_maxTickets > 0, "Max tickets must be greater than zero");
@@ -62,6 +67,8 @@ contract SingleLottery {
             _ownerFeePercent + _winnerPrizePercent + _returnedPrizePercent == 100,
             "Prize distribution must sum to 100%"
         );
+        //require(_startTime >= block.timestamp, "Start time must be in the future");
+        //require(_duration > 0, "Duration must be greater than zero");
 
         owner = msg.sender;
         TICKET_PRICE = _ticketPrice;
@@ -69,6 +76,8 @@ contract SingleLottery {
         OWNER_FEE_PERCENT = _ownerFeePercent;
         WINNER_PRIZE_PERCENT = _winnerPrizePercent;
         RETURNED_PRIZE_PERCENT = _returnedPrizePercent;
+        //START_TIME = _startTime;
+        //DURATION = _duration;
     }
 
     // Функция покупки билетов
